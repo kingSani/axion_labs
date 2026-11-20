@@ -1,62 +1,328 @@
+"use client";
+
 import Image from "next/image";
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { Float, OrbitControls } from "@react-three/drei";
+import Headers from "./components/Headers";
+
+function HeroModel() {
+  return (
+    <Float speed={1.2} rotationIntensity={0.25} floatIntensity={0.25}>
+      <group rotation={[0.2, 0.3, 0]}>
+        <mesh>
+          <torusKnotGeometry args={[0.85, 0.24, 180, 32]} />
+          <meshStandardMaterial
+            color="#f97316"
+            metalness={0.7}
+            roughness={0.22}
+          />
+        </mesh>
+
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[1.5, 0.018, 16, 120]} />
+          <meshStandardMaterial
+            color="#f97316"
+            metalness={0.8}
+            roughness={0.25}
+          />
+        </mesh>
+      </group>
+    </Float>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="mb-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">
+      <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
+      {children}
+    </span>
+  );
+}
+
+function ServiceCard({
+  number,
+  title,
+  description,
+  features,
+}: {
+  number: string;
+  title: string;
+  description: string;
+  features: string[];
+}) {
+  return (
+    <article className="group flex flex-col rounded-2xl bg-white p-8 transition duration-300 hover:-translate-y-1 dark:bg-slate-900">
+      <div className="mb-12 flex items-center justify-between">
+        <span className="text-sm font-medium text-slate-400">{number}</span>
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-50 text-orange-500 transition group-hover:bg-orange-500 group-hover:text-white dark:bg-orange-500/10">
+          ↗
+        </span>
+      </div>
+
+      <h3 className="text-2xl font-semibold tracking-tight">{title}</h3>
+
+      <p className="mb-8 mt-3 leading-7 text-slate-600 dark:text-slate-400">
+        {description}
+      </p>
+
+      <ul className="mt-auto space-y-3">
+        {features.map((feature) => (
+          <li
+            key={feature}
+            className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400"
+          >
+            <span className="text-orange-500">✓</span>
+            {feature}
+          </li>
+        ))}
+      </ul>
+    </article>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 799 799">
-          <path
-            d="M0 0 C6.25 1.56 6.25 1.56 8.35 2.09 C13.13 3.29 17.91 4.47 22.7 5.65 C44.25 10.96 44.25 10.96 54.7 14.16 C60.67 15.96 66.7 17.45 72.75 18.94 C81.34 21.05 89.85 23.34 98.35 25.82 C104.2 27.52 110.08 29.05 116 30.5 C122.9 32.19 129.74 34.02 136.56 36 C148.76 39.53 161.04 42.73 173.34 45.88 C176.02 46.56 178.7 47.25 181.38 47.94 C182.38 48.2 182.38 48.2 183.41 48.46 C192.55 50.81 201.64 53.28 210.7 55.92 C217.26 57.82 223.85 59.49 230.48 61.11 C236.55 62.6 242.56 64.26 248.56 66 C260.47 69.45 272.45 72.58 284.45 75.66 C295.75 78.56 307.02 81.53 318.22 84.8 C325.78 86.98 333.41 88.87 341.05 90.75 C348.54 92.6 355.94 94.66 363.35 96.82 C370.02 98.75 376.73 100.46 383.48 102.11 C390.42 103.82 397.28 105.77 404.14 107.77 C410.07 109.48 416.01 111.04 422 112.5 C429.25 114.27 436.45 116.2 443.62 118.25 C444.53 118.51 445.44 118.77 446.38 119.03 C452.74 120.87 452.74 120.87 455 122 C454.5 127.95 453.51 133.47 451.81 139.19 C451.36 140.75 450.92 142.31 450.47 143.87 C450.11 145.1 450.11 145.1 449.75 146.36 C448.12 152.08 446.6 157.82 445.06 163.56 C443.83 168.09 442.55 172.57 441 177 C435.64 176.44 430.85 175.49 425.69 173.88 C418.21 171.59 410.69 169.57 403.12 167.62 C401.98 167.33 400.84 167.04 399.66 166.73 C396.11 165.82 392.55 164.91 389 164 C362.36 157.18 362.36 157.18 351.35 153.84 C344.28 151.73 337.11 150 329.94 148.23 C323.19 146.56 316.49 144.79 309.8 142.89 C303.7 141.17 297.57 139.58 291.44 138 C284.77 136.28 278.15 134.5 271.56 132.5 C263.83 130.16 256.02 128.2 248.16 126.32 C242.32 124.9 236.56 123.3 230.81 121.59 C223 119.26 215.15 117.17 207.25 115.18 C203.44 114.21 199.63 113.24 195.82 112.27 C195.07 112.07 194.31 111.88 193.53 111.68 C177.38 107.54 161.31 103.1 145.27 98.56 C137.04 96.25 128.76 94.16 120.46 92.13 C114.08 90.55 107.79 88.8 101.51 86.89 C94.38 84.76 87.16 83.01 79.94 81.23 C73.19 79.56 66.49 77.79 59.8 75.89 C53.7 74.17 47.57 72.58 41.44 71 C34.86 69.3 28.31 67.54 21.81 65.56 C9.68 61.88 -2.69 59.01 -15 56 C-13.77 48.3 -11.95 40.95 -9.69 33.5 C-7.13 24.94 -4.72 16.37 -2.51 7.71 C-1.09 2.19 -1.09 2.19 0 0 Z"
-            fill="#F77216"
-            transform="translate(179,323)"
-          />
+    <main className="min-h-screen overflow-hidden bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      {/* Navigation */}
+      <Headers />
 
-          <path
-            d="M0 0 C36.3 0 72.6 0 110 0 C110 79.53 110 159.06 110 241 C104.21 240.03 98.63 238.74 92.94 237.31 C91.88 237.05 90.82 236.78 89.72 236.51 C81.99 234.55 74.32 232.42 66.66 230.18 C60.8 228.48 54.92 226.95 49 225.5 C41.12 223.58 33.33 221.43 25.54 219.17 C19 217.27 12.43 215.49 5.84 213.76 C3.87 213.23 1.93 212.64 0 212 C0 142.04 0 72.08 0 0 Z"
-            fill="#EFF3F7"
-            transform="translate(484,173)"
-          />
+      {/* Hero */}
+      <section className="relative mx-auto grid min-h-[680px] max-w-7xl items-center gap-8 px-6 py-16 lg:grid-cols-2 lg:py-20">
+        <div className="relative z-10">
+          <SectionLabel>Engineering, made tangible</SectionLabel>
 
-          <path
-            d="M0 0 C6.59 0.44 12.51 1.83 18.81 3.75 C25.84 5.83 32.88 7.77 40 9.5 C47.52 11.34 54.96 13.38 62.4 15.55 C70.67 17.94 78.99 20.16 87.31 22.38 C87.99 22.56 88.68 22.74 89.38 22.92 C93.25 23.95 97.13 24.98 101 26 C99.71 34.04 97.32 41.66 94.83 49.39 C93.17 54.61 91.54 59.84 89.91 65.07 C89.13 67.57 88.35 70.06 87.56 72.56 C79.27 99.07 71.01 125.59 62.78 152.11 C62.07 154.42 61.35 156.72 60.64 159.02 C59.5 162.68 58.37 166.34 57.23 170 C56.82 171.34 56.41 172.67 55.99 174 C52.9 183.97 49.95 193.98 47 204 C10.7 204 -25.6 204 -63 204 C-61.64 197.86 -60.17 192.14 -58.12 186.25 C-54.48 175.65 -51.26 164.93 -48.11 154.17 C-45.24 144.39 -42.3 134.66 -39.01 125.02 C-37.15 119.54 -35.55 114 -34 108.43 C-32.93 104.75 -31.73 101.12 -30.5 97.5 C-28.87 92.69 -27.36 87.89 -26 83 C-24.28 76.83 -22.27 70.78 -20.22 64.72 C-19.05 61.17 -18.01 57.6 -17 54 C-15.64 49.11 -14.13 44.31 -12.5 39.5 C-10.51 33.61 -8.72 27.7 -7.04 21.71 C-5.82 17.37 -4.57 13.02 -3.31 8.69 C-3.1 7.94 -2.88 7.19 -2.66 6.42 C-1.11 1.11 -1.11 1.11 0 0 Z"
-            fill="#F0F4F8"
-            transform="translate(251,422)"
-          />
-
-          <path
-            d="M0 0 C36.3 0 72.6 0 110 0 C100.81 31.02 100.81 31.02 96.43 45 C95.93 46.58 95.44 48.15 94.95 49.73 C93.93 53 92.9 56.28 91.88 59.55 C90.28 64.65 88.69 69.75 87.1 74.85 C86.83 75.7 86.57 76.55 86.3 77.42 C85.76 79.13 85.23 80.83 84.7 82.53 C83.92 85.05 83.13 87.56 82.34 90.08 C78.29 103.05 74.26 116.02 70.25 129 C70 129.82 69.75 130.63 69.49 131.47 C67.99 136.31 66.49 141.16 65 146 C64.64 147.15 64.29 148.31 63.92 149.5 C62.31 154.74 60.7 159.98 59.11 165.23 C58.81 166.22 58.52 167.2 58.21 168.22 C57.6 170.24 56.99 172.26 56.38 174.28 C56.09 175.26 55.79 176.23 55.49 177.23 C55.23 178.1 54.96 178.97 54.69 179.87 C54 182 54 182 53 184 C44.98 182.91 37.35 180.73 29.61 178.46 C22.71 176.45 15.78 174.65 8.81 172.94 C1.19 171.06 -6.4 169.11 -13.95 166.98 C-21 164.99 -28.06 163.09 -35.12 161.19 C-36.3 160.87 -37.47 160.56 -38.67 160.23 C-41.45 159.49 -44.22 158.74 -47 158 C-48.48 153.41 -46.89 149.99 -45.31 145.62 C-44.74 144 -44.18 142.37 -43.62 140.74 C-43.34 139.93 -43.06 139.13 -42.77 138.3 C-41.72 135.17 -40.82 132 -39.94 128.81 C-38.6 123.99 -37.11 119.24 -35.5 114.5 C-33.87 109.69 -32.36 104.89 -31 100 C-29.28 93.83 -27.27 87.78 -25.22 81.72 C-24.05 78.17 -23.01 74.6 -22 71 C-20.31 64.95 -18.38 59 -16.34 53.06 C-12.53 41.73 -9.27 30.22 -5.91 18.75 C-5.41 17.06 -5.41 17.06 -4.9 15.33 C-4.61 14.33 -4.31 13.33 -4.01 12.29 C-2.75 8.17 -1.36 4.09 0 0 Z"
-            fill="#F0F4F8"
-            transform="translate(328,173)"
-          />
-
-          <path
-            d="M0 0 C13.85 3.32 27.34 6.59 40.96 10.57 C45.94 12.01 50.96 13.27 56 14.5 C63.76 16.39 71.43 18.52 79.1 20.76 C86.29 22.84 93.51 24.68 100.78 26.44 C106.81 27.9 106.81 27.9 109 29 C109 66.29 109 103.58 109 142 C73.03 142 37.06 142 0 142 C0 95.14 0 48.28 0 0 Z"
-            fill="#F0F4F8"
-            transform="translate(485,484)"
-          />
-
-          <path
-            d="M0 0 C8.37 0.54 16.48 3.18 24.48 5.53 C34.92 8.59 45.46 11.28 56 14 C56 25.55 56 37.1 56 49 C26.43 41.68 26.43 41.68 12.17 37.61 C8.08 36.45 3.97 35.32 -0.12 34.19 C-1.65 33.76 -3.17 33.34 -4.7 32.92 C-5.79 32.62 -6.88 32.31 -8 32 C-9.21 27.74 -8.71 25.05 -7.38 20.86 C-7.02 19.71 -6.66 18.55 -6.29 17.37 C-5.91 16.17 -5.52 14.98 -5.12 13.75 C-4.75 12.54 -4.37 11.33 -3.98 10.09 C-1.16 1.16 -1.16 1.16 0 0 Z"
-            fill="#F67116"
-            transform="translate(409,331)"
-          />
-        </svg>
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            This is Axion Labs , UROM Jeho
+          <h1 className="max-w-2xl text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
+            Ideas into
+            <span className="block text-orange-500">things that work</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions?
+
+          <p className="mt-7 max-w-lg text-base leading-8 text-slate-600 dark:text-slate-400">
+            Discover 3D printable models, explore engineering projects, and get
+            the design support you need to bring your ideas to life
+          </p>
+
+          <div className="mt-9 flex flex-wrap items-center gap-4">
             <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="#models"
+              className="rounded-full bg-orange-500 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-600"
             >
-              Learning how to model!!!
+              Explore the marketplace ↗
             </a>
+
+            <a
+              href="#services"
+              className="rounded-full px-7 py-3.5 text-sm font-semibold text-slate-700 transition hover:text-orange-500 dark:text-slate-300"
+            >
+              Our services
+            </a>
+          </div>
+
+          <div className="mt-14 flex flex-wrap gap-10">
+            <div>
+              <p className="text-2xl font-semibold">3D</p>
+              <p className="mt-1 text-xs text-slate-500">Printable models</p>
+            </div>
+            <div>
+              <p className="text-2xl font-semibold">PCB</p>
+              <p className="mt-1 text-xs text-slate-500">Circuit boards</p>
+            </div>
+            <div>
+              <p className="text-2xl font-semibold">CAD</p>
+              <p className="mt-1 text-xs text-slate-500">Design support</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Floating 3D model */}
+        <div className="relative h-[440px] w-full lg:h-[580px]">
+          <div className="pointer-events-none absolute inset-[10%] rounded-full bg-orange-500/10 blur-[100px]" />
+
+          <Canvas
+            camera={{ position: [0, 0, 5], fov: 45 }}
+            dpr={[1, 2]}
+            gl={{ alpha: true, antialias: true }}
+          >
+            <ambientLight intensity={1.2} />
+
+            <directionalLight position={[4, 5, 3]} intensity={2} />
+
+            <pointLight
+              position={[-4, -2, -3]}
+              intensity={1.5}
+              color="#f97316"
+            />
+
+            <Suspense fallback={null}>
+              <HeroModel />
+            </Suspense>
+
+            <OrbitControls
+              enablePan={false}
+              enableZoom
+              enableRotate
+              autoRotate
+              autoRotateSpeed={0.7}
+              minDistance={3}
+              maxDistance={8}
+              enableDamping
+              dampingFactor={0.05}
+            />
+          </Canvas>
+        </div>
+      </section>
+
+      {/* Marketplace */}
+      <section id="models" className="bg-white px-6 py-24 dark:bg-slate-900/40">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+            <div>
+              <SectionLabel>The marketplace</SectionLabel>
+
+              <h2 className="max-w-xl text-4xl font-semibold tracking-tight sm:text-5xl">
+                Find the parts to
+                <span className="text-orange-500"> build your ideas</span>
+              </h2>
+            </div>
+
+            <p className="max-w-md leading-7 text-slate-600 dark:text-slate-400">
+              Explore digital models created for practical engineering projects
+              and preview designs in 3D before choosing what to build
+            </p>
+          </div>
+
+          <div className="mt-14 grid gap-5 md:grid-cols-3">
+            {[
+              {
+                title: "Mechanical parts",
+                description:
+                  "Functional components and custom mechanical designs",
+                icon: "⚙",
+              },
+              {
+                title: "Project enclosures",
+                description:
+                  "Housings and cases for electronics and prototypes",
+                icon: "▱",
+              },
+              {
+                title: "Engineering builds",
+                description: "Models and components for hands-on projects",
+                icon: "⌘",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl bg-slate-100 p-7 transition hover:bg-orange-50 dark:bg-slate-950 dark:hover:bg-slate-900"
+              >
+                <span className="text-3xl text-orange-500">{item.icon}</span>
+
+                <h3 className="mt-8 text-xl font-semibold">{item.title}</h3>
+
+                <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                  {item.description}
+                </p>
+
+                <a
+                  href="#"
+                  className="mt-7 inline-block text-sm font-semibold text-orange-500"
+                >
+                  Explore category ↗
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services */}
+      <section id="services" className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mb-14 max-w-2xl">
+          <SectionLabel>What we do</SectionLabel>
+
+          <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+            More than just
+            <span className="text-orange-500"> models</span>
+          </h2>
+
+          <p className="mt-5 leading-8 text-slate-600 dark:text-slate-400">
+            From circuit concepts to production-ready board layouts, we help
+            turn engineering ideas into practical solutions
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row"></div>
-      </main>
-    </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <ServiceCard
+            number="01 / PCB DESIGN"
+            title="PCB Design Services"
+            description="Get custom printed circuit board designs built around your project's requirements"
+            features={[
+              "Schematic capture",
+              "PCB layout and routing",
+              "Design review and documentation",
+            ]}
+          />
+
+          <ServiceCard
+            number="02 / CIRCUIT DESIGN"
+            title="Circuit Design Services"
+            description="Get help designing and developing electronic circuits for prototypes and engineering projects"
+            features={[
+              "Circuit architecture",
+              "Component selection",
+              "Simulation and testing support",
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section id="about" className="px-6 pb-24">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-slate-900 px-8 py-16 text-white sm:px-14 sm:py-20 dark:bg-slate-800">
+          <div className="pointer-events-none absolute -right-20 -top-32 h-96 w-96 rounded-full bg-orange-500/20 blur-[100px]" />
+
+          <div className="relative z-10 max-w-2xl">
+            <SectionLabel>Start building</SectionLabel>
+
+            <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+              Have an idea?
+              <span className="block text-orange-500">
+                Let&apos;s make it real
+              </span>
+            </h2>
+
+            <p className="mt-6 max-w-lg leading-8 text-slate-300">
+              Find the right models, get expert design support, and take your
+              next engineering project from concept to reality
+            </p>
+
+            <a
+              href="mailto:hello@axionlabs.com"
+              className="mt-9 inline-flex rounded-full bg-orange-500 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-600"
+            >
+              Get in touch ↗
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="px-6 py-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-slate-500 sm:flex-row">
+          <Image
+            src="/axion-logo.svg"
+            alt="Axion Labs"
+            width={36}
+            height={36}
+            className="h-9 w-9 object-contain"
+          />
+
+          <p>© {new Date().getFullYear()} Axion Labs</p>
+
+          <p>Built for curious minds</p>
+        </div>
+      </footer>
+    </main>
   );
 }
