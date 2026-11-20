@@ -1,29 +1,10 @@
 import { Float } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 
 export function HeroModel() {
-  return (
-    <Float speed={1.2} rotationIntensity={0.25} floatIntensity={0.25}>
-      <group rotation={[0.2, 0.3, 0]}>
-        <mesh>
-          <torusKnotGeometry args={[0.85, 0.24, 180, 32]} />
-          <meshStandardMaterial
-            color="#f97316"
-            metalness={0.7}
-            roughness={0.22}
-          />
-        </mesh>
+  const { scene } = useGLTF("/models/HardHat.glb");
 
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.5, 0.018, 16, 120]} />
-          <meshStandardMaterial
-            color="#f97316"
-            metalness={0.8}
-            roughness={0.25}
-          />
-        </mesh>
-      </group>
-    </Float>
-  );
+  return <primitive object={scene} scale={1.5} position={[0, -1, 0]} />;
 }
 export function SectionLabel({ children }: { children: React.ReactNode }) {
   return (

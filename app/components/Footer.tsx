@@ -1,7 +1,10 @@
 import Image from "next/image";
-import React from "react";
-
+import { useSyncExternalStore } from "react";
+const subscribe = () => () => {};
+const getClientYear = () => new Date().getFullYear();
+const getServerYear = () => 2026;
 export default function Footer() {
+  const year = useSyncExternalStore(subscribe, getClientYear, getServerYear);
   return (
     <footer className="px-6 py-8">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-slate-500 sm:flex-row">
@@ -13,7 +16,7 @@ export default function Footer() {
           className="h-9 w-9 object-contain"
         />
 
-        <p>© {new Date().getFullYear()} Axion Labs</p>
+        <p>© {year} Axion Labs. All rights reserved.</p>
 
         <p>Built for curious minds</p>
       </div>
