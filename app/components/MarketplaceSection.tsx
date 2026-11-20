@@ -1,24 +1,14 @@
-import React from "react";
-import { SectionLabel } from "./LandingComponents";
-
 export default function MarketplaceSection() {
   return (
     <section id="models" className="bg-white px-6 py-24 dark:bg-slate-900/40">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
-            <SectionLabel>The marketplace</SectionLabel>
-
             <h2 className="max-w-xl text-4xl font-semibold tracking-tight sm:text-5xl">
               Find the parts to
               <span className="text-orange-500"> build your ideas</span>
             </h2>
           </div>
-
-          <p className="max-w-md leading-7 text-slate-600 dark:text-slate-400">
-            Explore digital models created for practical engineering projects
-            and preview designs in 3D before choosing what to build
-          </p>
         </div>
 
         <div className="mt-14 grid gap-5 md:grid-cols-3">

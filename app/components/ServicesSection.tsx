@@ -1,11 +1,9 @@
-import { SectionLabel, ServiceCard } from "./LandingComponents";
+import { ServiceCard } from "./LandingComponents";
 
 export default function ServicesSection() {
   return (
     <section id="services" className="mx-auto max-w-7xl px-6 py-24">
       <div className="mb-14 max-w-2xl">
-        <SectionLabel>What we do</SectionLabel>
-
         <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           More than just
           <span className="text-orange-500"> models</span>

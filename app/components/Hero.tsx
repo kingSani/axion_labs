@@ -1,18 +1,17 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import { SectionLabel, HeroModel } from "./LandingComponents";
-import React from "react";
+import { HeroModel } from "./LandingComponents";
 
 export default function Hero() {
   return (
-    <section className="relative mx-auto grid min-h-170 max-w-7xl items-center gap-8 px-6 py-16 lg:grid-cols-2 lg:py-20">
+    <section className="relative mx-auto grid min-h-170 max-w-7xl items-center gap-8 px-6 py-16 lg:grid-cols-2 lg:py-10">
       <div className="relative z-10">
-        <SectionLabel>Engineering, made tangible</SectionLabel>
-
         <h1 className="max-w-2xl text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
-          Ideas into
-          <span className="block text-orange-500">things that work</span>
+          Axion Labs
+          <span className="block text-4xl max-w-2xl text-orange-500">
+            Turning ideas into things that work
+          </span>
         </h1>
 
         <p className="mt-7 max-w-lg text-base leading-8 text-slate-600 dark:text-slate-400">
@@ -73,7 +72,7 @@ export default function Hero() {
 
           <OrbitControls
             enablePan={false}
-            enableZoom
+            enableZoom={false}
             enableRotate
             autoRotate
             autoRotateSpeed={0.7}
